@@ -11,7 +11,7 @@ This plugin SMS Retriever API, you can perform SMS-based user verification in yo
 Add as a cordova dependency.
 
 ```bash
-cordova plugin add https://bitbucket.org/uxmobile/bupa-android-sms-retriever.git
+cordova plugin add https://github.com/Paulimjr/sms-retriever-plugin.git
 ```
 
 ## Using the plugin ##
@@ -28,9 +28,9 @@ All the functions described in this plugin reside in the `cordova.plugins.SmsRet
  
  <!-- Hash key string to determine which verification messages to send to your app
         After generating the hash key you need to create a message on your server that looks like the following:
-        Your ExampleApp OTP code is 222222 (lenght code equals 6 digits)
+        Your ExampleApp OTP code is '222222' (lenght code equals 6 digits)
         
-        FA+9qCX9VSu -->
+        'FA+9qCX9VSu' -->
 
 cordova.plugins.SmsRetrieverPlugin.generateHashKey(
     function(hashKey){console.log("hashKey: " + hashKey)},
@@ -41,7 +41,7 @@ cordova.plugins.SmsRetrieverPlugin.generateHashKey(
 ```javascript
 
  <!-- Start the OTP listener to receive SMS with the OTP code extracted
-        Example of result is: 222222 -->
+        Example of result is: '222222' -->
 
 document.addEventListener("deviceready", function(){ 
        ...
