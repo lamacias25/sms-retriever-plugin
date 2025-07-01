@@ -1,39 +1,26 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android" id="com.outsystems.smsretriever" version="1.0.0">
+<?xml version='1.0' encoding='utf-8'?>
+<plugin id="cordova-plugin-sms-retriever" version="1.0.0" xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
+  <name>SmsRetriever</name>
+  <description>Plugin to retrieve SMS without permissions using Google's SMS Retriever API</description>
+  <license>MIT</license>
+  <keywords>sms, retriever, google, otp, verification</keywords>
+  <js-module name="SmsRetriever" src="www/smsretriever.js">
+    <clobbers target="SmsRetriever" />
+  </js-module>
 
-   <name>SmsRetrieverPlugin</name>
+  <platform name="android">
+    <config-file target="AndroidManifest.xml" parent="application">
+      <receiver
+        android:name="com.google.android.gms.auth.api.phone.SmsRetrieverBroadcastReceiver"
+        android:permission="com.google.android.gms.auth.api.phone.permission.SEND"
+        android:exported="true">
+        <intent-filter>
+          <action android:name="com.google.android.gms.auth.api.phone.SMS_RETRIEVED" />
+        </intent-filter>
+      </receiver>
+    </config-file>
 
-   <js-module name="SmsRetrieverPlugin" src="www/SmsRetrieverPlugin.js">
-      <clobbers target="cordova.plugins.SmsRetrieverPlugin" />
-   </js-module>
-
-   <platform name="android">
-
-      <config-file parent="/*" target="res/xml/config.xml">
-         <feature name="SmsRetrieverPlugin">
-            <param name="android-package" value="com.outsystems.smsretriever.SmsRetrieverPlugin" />
-         </feature>
-      </config-file>
-
-      <!-- ✅ ADICIONADO: Corrige o erro no Android 12+ -->
-      <config-file target="AndroidManifest.xml" parent="application">
-         <receiver
-           android:name="com.google.android.gms.auth.api.phone.SmsRetrieverBroadcastReceiver"
-           android:permission="com.google.android.gms.auth.api.phone.permission.SEND"
-           android:exported="true">
-           <intent-filter>
-             <action android:name="com.google.android.gms.auth.api.phone.SMS_RETRIEVED"/>
-           </intent-filter>
-         </receiver>
-      </config-file>
-
-      <!-- Arquivos Java do plugin -->
-      <source-file src="src/android/SmsRetrieverPlugin.java" target-dir="src/com/outsystems/smsretriever" />
-      <source-file src="src/android/OtpReceivedInterface.java" target-dir="src/com/outsystems/smsretriever" />
-      <source-file src="src/android/SmsRetrieverHandler.java" target-dir="src/com/outsystems/smsretriever" />
-      <source-file src="src/android/AppSignatureHelper.java" target-dir="src/com/outsystems/smsretriever" />
-
-      <framework custom="true" src="src/android/sms-retriever.gradle" type="gradleReference" />
-
-   </platform>
+    <framework src="com.google.android.gms:play-services-auth-api-phone:17.5.1" />
+    <source-file src="src/android/SmsRetriever.java" target-dir="src/com/outsystems/mavidev/credilanadevmejoras/" />
+  </platform>
 </plugin>
