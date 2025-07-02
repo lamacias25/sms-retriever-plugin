@@ -55,17 +55,18 @@ public class SmsRetrieverPlugin extends CordovaPlugin {
                     @Override
                     public void onOtpReceived(String otp) {
                         Log.v("onOtpReceived", otp);
-                        String codeReceived = getOTPCode(otp);
-                        JSONObject objectCode = new JSONObject();
-
-                        try {
-                            objectCode.put("code", codeReceived);
-                            callbackContext.success(objectCode);
-                        } catch (JSONException e) {
-                            callbackContext.error(e.getMessage());
-                            Toast.makeText(cordova.getActivity(), "Plugin error: " + e.getMessage(), Toast.LENGTH_LONG).show();
-                            Log.v("JSONException", e.getMessage());
-                        }
+                        cordova.getActivity().runOnUiThread(() -> {
+                            try {
+                                String codeReceived = getOTPCode(otp);
+                                JSONObject objectCode = new JSONObject();
+                                objectCode.put("code", codeReceived);
+                                callbackContext.success(objectCode);
+                            } catch (JSONException e) {
+                                callbackContext.error(e.getMessage());
+                                Toast.makeText(cordova.getActivity(), "Plugin error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                                Log.v("JSONException", e.getMessage());
+                            }
+                        });
                     }
 
                     @Override

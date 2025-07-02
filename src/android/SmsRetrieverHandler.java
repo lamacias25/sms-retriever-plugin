@@ -25,6 +25,10 @@ public class SmsRetrieverHandler {
         this.activity = activity;
     }
 
+    public BroadcastReceiver getBroadcastReceiver() {
+        return mSmsBroadcastReceiver;
+    }
+
     void startBroadcastReceiver() {
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(SmsRetriever.SMS_RETRIEVED_ACTION);
@@ -44,17 +48,33 @@ public class SmsRetrieverHandler {
             Log.d(TAG, "onReceive: ");
             if (SmsRetriever.SMS_RETRIEVED_ACTION.equals(intent.getAction())) {
                 Bundle extras = intent.getExtras();
+                if (extras == null) {
+                    Log.e(TAG, "extras es null");
+                    return;
+                }
                 Status mStatus = (Status) extras.get(SmsRetriever.EXTRA_STATUS);
+                if (mStatus == null) {
+                    Log.e(TAG, "Status es null");
+                    return;
+                }
 
                 switch (mStatus.getStatusCode()) {
                 case CommonStatusCodes.SUCCESS:
                     // Get SMS message contents'
                     String message = (String) extras.get(SmsRetriever.EXTRA_SMS_MESSAGE);
-                    Log.d(TAG, "onReceive: failure " + message);
-                    if (onOtpReceived != null) {
-                        String otpMessage = message.replace("<#> Your otp code is: ", "");
-                        String otp = otpMessage.split("\n")[0];
-                        onOtpReceived.onOtpReceived(otp);
+                    if (message != null) {
+                        Log.d(TAG, "SMS message: " + message);
+                        if (onOtpReceived != null) {
+                            try {
+                                String otpMessage = message.replace("<#> Your otp code is: ", "");
+                                String[] lines = otpMessage.split("\n");
+                                String otp = lines.length > 0 ? lines[0] : "";
+                                onOtpReceived.onOtpReceived(otp);
+                            } catch (Exception e) {
+                                Log.e(TAG, "Error extracting OTP: " + e.getMessage());
+                                onOtpReceived.onOtpReceived(""); // o manejar el error de otra forma
+                            }
+                        }
                     }
                     break;
                 case CommonStatusCodes.TIMEOUT:
@@ -65,6 +85,17 @@ public class SmsRetrieverHandler {
                     }
                     break;
                 }
+            }
+        }
+
+        @Override
+        public void onPause(boolean multitasking) {
+            super.onPause(multitasking);
+            try {
+                this.cordova.getActivity().unregisterReceiver(smsRetrieverHandler.getBroadcastReceiver());
+                Log.d("SmsRetrieverPlugin", "BroadcastReceiver desregistrado en onPause");
+            } catch (IllegalArgumentException e) {
+                Log.w("SmsRetrieverPlugin", "Receiver ya estaba desregistrado o nunca fue registrado");
             }
         }
     };
