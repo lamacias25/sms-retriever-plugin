@@ -1,6 +1,7 @@
 package com.outsystems.smsretriever;
 
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.gms.auth.api.phone.SmsRetriever;
 import com.google.android.gms.auth.api.phone.SmsRetrieverClient;
@@ -62,6 +63,7 @@ public class SmsRetrieverPlugin extends CordovaPlugin {
                             callbackContext.success(objectCode);
                         } catch (JSONException e) {
                             callbackContext.error(e.getMessage());
+                            Toast.makeText(this.cordova.getActivity(), "Plugin error: " + e.getMessage(), Toast.LENGTH_LONG).show();
                             Log.v("JSONException", e.getMessage());
                         }
                     }
@@ -123,6 +125,7 @@ public class SmsRetrieverPlugin extends CordovaPlugin {
             Log.v("hashKey", hashKey);
             this.callbackContext.success(objectHashKey);
         } catch (JSONException e) {
+            Toast.makeText(this.cordova.getActivity(), "Plugin error: " + e.getMessage(), Toast.LENGTH_LONG).show();
             this.callbackContext.error(e.getMessage());
         }
     }
