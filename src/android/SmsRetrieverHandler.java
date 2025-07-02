@@ -87,16 +87,5 @@ public class SmsRetrieverHandler {
                 }
             }
         }
-
-        @Override
-        public void onPause(boolean multitasking) {
-            super.onPause(multitasking);
-            try {
-                this.cordova.getActivity().unregisterReceiver(smsRetrieverHandler.getBroadcastReceiver());
-                Log.d("SmsRetrieverPlugin", "BroadcastReceiver desregistrado en onPause");
-            } catch (IllegalArgumentException e) {
-                Log.w("SmsRetrieverPlugin", "Receiver ya estaba desregistrado o nunca fue registrado");
-            }
-        }
     };
 }
