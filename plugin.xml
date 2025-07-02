@@ -23,11 +23,6 @@
  
       </config-file>
 
-      <!-- Forzar android:exported en todos los receivers (opcional, usar con cuidado) -->
-      <config-file target="AndroidManifest.xml" parent="/manifest/application" mode="merge">
-         <receiver android:exported="true" />
-      </config-file>
-
       <!-- Archivos Java del plugin -->
       <source-file src="src/android/SmsRetrieverPlugin.java" target-dir="src/com/outsystems/smsretriever" />
       <source-file src="src/android/OtpReceivedInterface.java" target-dir="src/com/outsystems/smsretriever" />
