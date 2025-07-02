@@ -29,11 +29,30 @@ public class SmsRetrieverHandler {
         return mSmsBroadcastReceiver;
     }
 
+
     void startBroadcastReceiver() {
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(SmsRetriever.SMS_RETRIEVED_ACTION);
-        this.activity.registerReceiver(mSmsBroadcastReceiver, intentFilter);
+    
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+            activity.registerReceiver(mSmsBroadcastReceiver, intentFilter, Context.RECEIVER_EXPORTED);
+        } else {
+            activity.registerReceiver(mSmsBroadcastReceiver, intentFilter);
+        }
     }
+    
+
+   /*  void startBroadcastReceiver() {
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(SmsRetriever.SMS_RETRIEVED_ACTION);
+       // this.activity.registerReceiver(mSmsBroadcastReceiver, intentFilter);/
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+            this.registerReceiver(mSmsBroadcastReceiver, intentFilter, Context.RECEIVER_EXPORTED);
+        } else {
+            this.registerReceiver(mSmsBroadcastReceiver, intentFilter);
+        }
+        
+    }*/
 
     protected OtpReceivedInterface<String> onOtpReceived;
 

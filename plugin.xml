@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android" id="com.outsystems.smsretriever" version="1.0.0">
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        id="com.outsystems.smsretriever"
+        version="1.0.0">
 
    <name>SmsRetrieverPlugin</name>
 
@@ -15,19 +18,17 @@
          </feature>
       </config-file>
 
-      <!-- ✅ ADICIONADO: Corrige o erro no Android 12+ -->
+      <!-- Receiver específico con android:exported -->
       <config-file target="AndroidManifest.xml" parent="application">
-         <receiver
-           android:name="com.google.android.gms.auth.api.phone.SmsRetrieverBroadcastReceiver"
-           android:permission="com.google.android.gms.auth.api.phone.permission.SEND"
-           android:exported="true">
-           <intent-filter>
-             <action android:name="com.google.android.gms.auth.api.phone.SMS_RETRIEVED"/>
-           </intent-filter>
-         </receiver>
+ 
       </config-file>
 
-      <!-- Arquivos Java do plugin -->
+      <!-- Forzar android:exported en todos los receivers (opcional, usar con cuidado) -->
+      <config-file target="AndroidManifest.xml" parent="/manifest/application" mode="merge">
+         <receiver android:exported="true" />
+      </config-file>
+
+      <!-- Archivos Java del plugin -->
       <source-file src="src/android/SmsRetrieverPlugin.java" target-dir="src/com/outsystems/smsretriever" />
       <source-file src="src/android/OtpReceivedInterface.java" target-dir="src/com/outsystems/smsretriever" />
       <source-file src="src/android/SmsRetrieverHandler.java" target-dir="src/com/outsystems/smsretriever" />
@@ -36,4 +37,5 @@
       <framework custom="true" src="src/android/sms-retriever.gradle" type="gradleReference" />
 
    </platform>
+
 </plugin>
